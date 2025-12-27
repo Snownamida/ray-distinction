@@ -157,6 +157,15 @@
                     setGameState('correct');
                     setStreak(s => s + 1);
                     setShowZhengBang(true);
+
+                    // 播放音效
+                    try {
+                        const audio = new Audio('./audio/蒸蚌.wav');
+                        audio.play().catch(e => console.error("Audio play failed", e));
+                    } catch (e) {
+                        console.error("Audio init failed", e);
+                    }
+
                     setTimeout(() => setShowZhengBang(false), 2000);
                 } else {
                     setGameState('wrong');
