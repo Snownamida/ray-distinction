@@ -1,26 +1,46 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>鳐魟鲼分辨大挑战 - SVG生成版</title>
+    <title>鳐魟鲼分辨大挑战</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <style>
         @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(1deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+            0% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(1deg);
+            }
+
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
         }
+
         @keyframes bounce-custom {
-            0%, 100% { transform: translateY(-25%) scale(1.1); animation-timing-function: cubic-bezier(0.8,0,1,1); }
-            50% { transform: translateY(0) scale(1.1); animation-timing-function: cubic-bezier(0,0,0.2,1); }
+
+            0%,
+            100% {
+                transform: translateY(-25%) scale(1.1);
+                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            }
+
+            50% {
+                transform: translateY(0) scale(1.1);
+                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            }
         }
     </style>
 </head>
+
 <body class="bg-sky-50">
     <div id="root"></div>
 
@@ -28,7 +48,7 @@
         const { useState, useEffect, useCallback, useMemo } = React;
 
         // --- 0. 图标组件 (替代 lucide-react 以减少依赖) ---
-        
+
         const IconCheck = ({ className, size = 24 }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="20 6 9 17 4 12"></polyline></svg>
         );
@@ -71,103 +91,12 @@
             }
         };
 
-        // --- 2. 生成式艺术组件 ---
-
-        const GenerativeRay = ({ type, seed }) => {
-            const traits = useMemo(() => {
-                const random = (offset = 0) => {
-                    const x = Math.sin(seed + offset) * 10000;
-                    return x - Math.floor(x);
-                };
-
-                const range = (min, max, offset) => min + random(offset) * (max - min);
-
-                // 变换参数
-                const rotation = range(-15, 15, 1);
-                const scaleX = range(0.9, 1.1, 2);
-                const scaleY = range(0.9, 1.1, 3);
-                
-                // 颜色变异
-                const baseColor = SPECIES_DATA[type].colorBase;
-                const hue = baseColor.h + range(-10, 10, 4);
-                const sat = baseColor.s + range(-10, 10, 5);
-                const light = baseColor.l + range(-10, 10, 6);
-                const fillColor = `hsl(${hue}, ${sat}%, ${light}%)`;
-                
-                // 斑点生成
-                const spots = [];
-                const numSpots = Math.floor(range(0, 8, 7));
-                for(let i=0; i<numSpots; i++) {
-                    spots.push({
-                        x: range(-30, 30, i * 10),
-                        y: range(-20, 20, i * 20),
-                        r: range(1, 4, i * 30),
-                        opacity: range(0.2, 0.5, i * 40)
-                    });
-                }
-
-                const tailCurve = range(-20, 20, 8);
-
-                return { rotation, scaleX, scaleY, fillColor, spots, tailCurve };
-            }, [type, seed]);
-
-            const renderBody = () => {
-                if (type === 'skate') {
-                    // 鳐: 菱形，胖尾巴，双小背鳍
-                    return (
-                        <g transform={`scale(${traits.scaleX}, ${traits.scaleY})`}>
-                            <path d="M0,-50 C30,-50 60,-20 50,10 C45,30 20,40 10,45 L5,90 L-5,90 L-10,45 C-20,40 -45,30 -50,10 C-60,-20 -30,-50 0,-50 Z" 
-                                  fill={traits.fillColor} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
-                            <ellipse cx="0" cy="75" rx="3" ry="6" fill={traits.fillColor} stroke="rgba(0,0,0,0.1)" />
-                            <ellipse cx="0" cy="85" rx="2.5" ry="5" fill={traits.fillColor} stroke="rgba(0,0,0,0.1)" />
-                        </g>
-                    );
-                } 
-                
-                if (type === 'stingray') {
-                    // 魟: 圆盘，鞭尾，有毒刺
-                    return (
-                        <g transform={`scale(${traits.scaleX}, ${traits.scaleY})`}>
-                            <path d="M0,-45 C35,-45 55,-10 45,20 C35,40 10,45 2,48" 
-                                  fill={traits.fillColor} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
-                            <path d="M0,-45 C-35,-45 -55,-10 -45,20 C-35,40 -10,45 -2,48" 
-                                  fill={traits.fillColor} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
-                            <path d={`M0,40 Q${traits.tailCurve},70 0,110`} 
-                                  fill="none" stroke={traits.fillColor} strokeWidth="4" strokeLinecap="round" />
-                            <path d="M0,55 L4,70 L-2,60 Z" fill="rgba(0,0,0,0.4)" />
-                        </g>
-                    );
-                }
-
-                if (type === 'eagleray') {
-                    // 鲼: 翅膀，头鳍
-                    return (
-                        <g transform={`scale(${traits.scaleX}, ${traits.scaleY})`}>
-                            <path d="M0,-20 C20,-20 80,-30 90,10 C95,30 60,40 30,35 L10,45 L-10,45 L-30,35 C-60,40 -95,30 -90,10 C-80,-30 -20,-20 0,-20 Z" 
-                                  fill={traits.fillColor} stroke="rgba(0,0,0,0.2)" strokeWidth="2"/>
-                            <path d="M-15,-20 L-20,-35 C-15,-40 -5,-40 0,-35 C5,-40 15,-40 20,-35 L15,-20 Z" 
-                                  fill={traits.fillColor} />
-                            <path d={`M0,45 Q${traits.tailCurve},80 0,120`} 
-                                  fill="none" stroke={traits.fillColor} strokeWidth="2" />
-                        </g>
-                    );
-                }
-            };
-
-            return (
-                <svg viewBox="-100 -60 200 200" className="w-full h-full drop-shadow-xl filter" style={{overflow: 'visible'}}>
-                    <g transform={`rotate(${traits.rotation})`}>
-                        <g transform="translate(10, 10) scale(0.95)" opacity="0.2">
-                             {renderBody()}
-                        </g>
-                        {renderBody()}
-                        {traits.spots.map((spot, i) => (
-                            <circle key={i} cx={spot.x} cy={spot.y} r={spot.r} fill="rgba(255,255,255,0.3)" opacity={spot.opacity} />
-                        ))}
-                    </g>
-                </svg>
-            );
+        const SPECIES_IMAGES = {
+            skate: ['skate_1.jpg', 'skate_2.jpg', 'skate_3.jpg', 'skate_4.jpg', 'skate_5.jpg', 'skate_6.jpg'],
+            stingray: ['stingray_1.jpg', 'stingray_2.jpg', 'stingray_3.jpg', 'stingray_4.jpg', 'stingray_5.jpg', 'stingray_6.jpg'],
+            eagleray: ['eagle_ray_1.jpg', 'eagle_ray_2.jpg', 'eagle_ray_3.jpg', 'eagle_ray_4.jpg', 'eagle_ray_5.jpg', 'eagle_ray_6.jpg']
         };
+
 
         // --- 3. 游戏逻辑组件 ---
 
@@ -175,7 +104,7 @@
             if (!show) return null;
             return (
                 <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
-                    <div className="bg-white border-b-8 border-yellow-400 rounded-3xl p-8 shadow-2xl transform flex flex-col items-center z-50" style={{animation: 'bounce-custom 1s infinite'}}>
+                    <div className="bg-white border-b-8 border-yellow-400 rounded-3xl p-8 shadow-2xl transform flex flex-col items-center z-50" style={{ animation: 'bounce-custom 1s infinite' }}>
                         <div className="text-7xl mb-4 animate-pulse">🌟</div>
                         <div className="text-4xl font-black text-yellow-600 tracking-wider">蒸 蚌！</div>
                         <div className="text-lg text-gray-400 font-bold mt-2">ZHEN BANG!</div>
@@ -187,7 +116,7 @@
         function App() {
             const [currentQuestion, setCurrentQuestion] = useState(null);
             const [selectedOption, setSelectedOption] = useState(null);
-            const [gameState, setGameState] = useState('playing'); 
+            const [gameState, setGameState] = useState('playing');
             const [streak, setStreak] = useState(0);
             const [showZhengBang, setShowZhengBang] = useState(false);
             const [stats, setStats] = useState({ correct: 0, total: 0 });
@@ -196,13 +125,16 @@
                 const keys = Object.keys(SPECIES_DATA);
                 const randomKey = keys[Math.floor(Math.random() * keys.length)];
                 const species = SPECIES_DATA[randomKey];
-                
+                const images = SPECIES_IMAGES[randomKey];
+                const randomImage = images[Math.floor(Math.random() * images.length)];
+
                 const seed = Math.random() * 10000;
 
                 setCurrentQuestion({
                     correctId: species.id,
                     seed: seed,
-                    correctSpecies: species
+                    correctSpecies: species,
+                    imagePath: `./images/${randomImage}`
                 });
                 setSelectedOption(null);
                 setGameState('playing');
@@ -215,10 +147,10 @@
 
             const handleSelect = (id) => {
                 if (gameState !== 'playing') return;
-                
+
                 setSelectedOption(id);
                 const isCorrect = id === currentQuestion.correctId;
-                
+
                 setStats(prev => ({ correct: prev.correct + (isCorrect ? 1 : 0), total: prev.total + 1 }));
 
                 if (isCorrect) {
@@ -234,7 +166,7 @@
 
             const getButtonStyle = (id) => {
                 const baseStyle = "w-full p-4 rounded-2xl border-2 border-b-4 font-bold text-lg transition-all active:border-b-2 active:translate-y-0.5 mb-3 flex items-center justify-between cursor-pointer";
-                
+
                 if (gameState === 'playing') {
                     return `${baseStyle} bg-white border-gray-200 text-gray-700 hover:bg-gray-50 active:bg-gray-100`;
                 }
@@ -251,7 +183,7 @@
 
             return (
                 <div className="min-h-screen font-sans max-w-md mx-auto border-x border-gray-200 shadow-2xl flex flex-col relative overflow-hidden bg-sky-50">
-                    
+
                     {/* Ocean Background Decor */}
                     <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-sky-200 to-sky-50 -z-10 rounded-b-[3rem]"></div>
 
@@ -260,10 +192,10 @@
                         <div className="flex items-center space-x-2">
                             <span className="text-xl font-black text-sky-900 tracking-tighter">鳐魟鲼分辨器</span>
                         </div>
-                        
+
                         <div className="flex items-center space-x-4">
                             {streak > 0 && (
-                                <div className="flex items-center" style={{animation: 'bounce 1s infinite'}}>
+                                <div className="flex items-center" style={{ animation: 'bounce 1s infinite' }}>
                                     <IconFlame className="text-orange-500 fill-orange-500" size={20} />
                                     <span className="text-orange-600 font-black ml-1 text-lg">{streak}</span>
                                 </div>
@@ -277,16 +209,17 @@
 
                     {/* Main Content */}
                     <main className="flex-1 p-6 flex flex-col items-center">
-                        
+
                         <h2 className="text-lg font-bold text-sky-800 mb-2 text-center opacity-80">
                             观察体型和尾巴...
                         </h2>
-                        
-                        <div className="w-full aspect-square bg-white/40 backdrop-blur-md rounded-[2rem] shadow-lg border-2 border-white/50 overflow-visible mb-6 relative p-8 flex items-center justify-center ring-4 ring-sky-100/50">
-                            <div className="w-full h-full" style={{animation: 'float 6s ease-in-out infinite'}}>
-                                <GenerativeRay 
-                                    type={currentQuestion.correctId} 
-                                    seed={currentQuestion.seed} 
+
+                        <div className="w-full aspect-square bg-white/40 backdrop-blur-md rounded-[2rem] shadow-lg border-2 border-white/50 overflow-hidden mb-6 relative ring-4 ring-sky-100/50">
+                            <div className="w-full h-full flex items-center justify-center p-2">
+                                <img
+                                    src={currentQuestion.imagePath}
+                                    alt="Ray Species"
+                                    className="w-full h-full object-cover rounded-[1.5rem] shadow-sm transform hover:scale-105 transition-transform duration-500"
                                 />
                             </div>
                         </div>
@@ -309,39 +242,35 @@
                     </main>
 
                     {/* Feedback Sheet */}
-                    <div 
-                        className={`fixed bottom-0 left-0 right-0 max-w-md mx-auto transition-transform duration-500 transform z-40 ${
-                            gameState === 'playing' ? 'translate-y-[110%]' : 'translate-y-0'
-                        }`}
-                        style={{transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)'}}
+                    <div
+                        className={`fixed bottom-0 left-0 right-0 max-w-md mx-auto transition-transform duration-500 transform z-40 ${gameState === 'playing' ? 'translate-y-[110%]' : 'translate-y-0'
+                            }`}
+                        style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}
                     >
-                        <div className={`p-6 pb-10 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] ${
-                            gameState === 'correct' 
-                                ? 'bg-green-50 border-t-2 border-green-200' 
-                                : 'bg-red-50 border-t-2 border-red-200'
-                        }`}>
+                        <div className={`p-6 pb-10 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] ${gameState === 'correct'
+                            ? 'bg-green-50 border-t-2 border-green-200'
+                            : 'bg-red-50 border-t-2 border-red-200'
+                            }`}>
                             <div className="flex flex-col mb-4">
                                 <div className="flex items-center mb-2">
-                                    <div className={`font-black text-2xl mr-2 ${
-                                        gameState === 'correct' ? 'text-green-600' : 'text-red-600'
-                                    }`}>
+                                    <div className={`font-black text-2xl mr-2 ${gameState === 'correct' ? 'text-green-600' : 'text-red-600'
+                                        }`}>
                                         {gameState === 'correct' ? '回答正确！' : '很遗憾！'}
                                     </div>
                                 </div>
-                                
+
                                 <p className="text-gray-700 font-medium leading-relaxed bg-white/60 p-4 rounded-2xl border border-black/5 text-sm">
                                     <span className="font-bold text-gray-900 block mb-1 text-lg">{currentQuestion.correctSpecies.name}</span>
                                     {currentQuestion.correctSpecies.desc}
                                 </p>
                             </div>
-                            
-                            <button 
+
+                            <button
                                 onClick={generateQuestion}
-                                className={`w-full py-4 rounded-xl font-black text-white text-lg tracking-wide shadow-lg transform transition active:scale-[0.98] flex items-center justify-center ${
-                                    gameState === 'correct' 
-                                    ? 'bg-green-500 hover:bg-green-600 shadow-green-200' 
+                                className={`w-full py-4 rounded-xl font-black text-white text-lg tracking-wide shadow-lg transform transition active:scale-[0.98] flex items-center justify-center ${gameState === 'correct'
+                                    ? 'bg-green-500 hover:bg-green-600 shadow-green-200'
                                     : 'bg-red-500 hover:bg-red-600 shadow-red-200'
-                                }`}
+                                    }`}
                             >
                                 下一题 <IconRotateCcw className="ml-2 w-5 h-5" />
                             </button>
@@ -357,4 +286,5 @@
         root.render(<App />);
     </script>
 </body>
+
 </html>
