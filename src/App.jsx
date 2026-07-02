@@ -28,9 +28,9 @@ const SPECIES_DATA = {
 const SPECIES_IMAGES = {
     // skate_2 / skate_5 retirés : ce sont des poissons-guitare (fiddler ray,
     // Rhinopristiformes), pas de vrais skates (Rajidae) — voir l'audit.
-    skate: ["skate_1.jpg", "skate_3.jpg", "skate_4.jpg", "skate_6.jpg"],
-    stingray: ["stingray_1.jpg", "stingray_2.jpg", "stingray_3.jpg", "stingray_4.jpg", "stingray_5.jpg", "stingray_6.jpg"],
-    eagleray: ["eagle_ray_1.jpg", "eagle_ray_2.jpg", "eagle_ray_3.jpg", "eagle_ray_4.jpg", "eagle_ray_5.jpg", "eagle_ray_6.jpg"],
+    skate: ["skate_1.jpg", "skate_3.jpg", "skate_4.jpg", "skate_6.jpg", "skate_7.jpg", "skate_8.jpg", "skate_9.jpg", "skate_10.jpg", "skate_11.jpg", "skate_12.jpg"],
+    stingray: ["stingray_1.jpg", "stingray_2.jpg", "stingray_3.jpg", "stingray_4.jpg", "stingray_5.jpg", "stingray_6.jpg", "stingray_7.jpg", "stingray_8.jpg", "stingray_9.jpg", "stingray_10.jpg"],
+    eagleray: ["eagle_ray_1.jpg", "eagle_ray_2.jpg", "eagle_ray_3.jpg", "eagle_ray_4.jpg", "eagle_ray_5.jpg", "eagle_ray_6.jpg", "eagle_ray_7.jpg", "eagle_ray_8.jpg", "eagle_ray_9.jpg", "eagle_ray_10.jpg"],
 };
 
 const BEST_KEY = "ray_best_streak";
