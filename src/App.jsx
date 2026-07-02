@@ -1,6 +1,34 @@
 import { useCallback, useEffect, useState } from "react";
 import { IconCheck, IconFlame, IconRotateCcw, IconShare, IconTrophy, IconX } from "./icons.jsx";
-import { getDict, resolveLang } from "./i18n";
+import { getDict, rememberLang, resolveLang } from "./i18n";
+
+// [code, label, chemin de la page statique] — voir vite.config.js (multi-pages)
+const LANGS = [
+    ["zh", "中", "/"],
+    ["en", "EN", "/en/"],
+    ["fr", "FR", "/fr/"],
+];
+
+const LangSwitch = ({ current }) => (
+    <div className="flex justify-end gap-1 px-4 pt-2 z-10">
+        {LANGS.map(([code, label, path]) => (
+            <a
+                key={code}
+                href={path}
+                onClick={(e) => {
+                    e.preventDefault();
+                    rememberLang(code);
+                    window.location.href = path;
+                }}
+                className={`text-xs font-bold px-2.5 py-0.5 rounded-full transition ${
+                    current === code ? "bg-sky-600 text-white" : "text-sky-700 bg-white/70 hover:bg-white"
+                }`}
+            >
+                {label}
+            </a>
+        ))}
+    </div>
+);
 
 const SPECIES_IMAGES = {
     // skate_2 / skate_5 retirés : ce sont des poissons-guitare (fiddler ray,
@@ -46,7 +74,7 @@ export default function App() {
         const key = SPECIES_KEYS[Math.floor(Math.random() * SPECIES_KEYS.length)];
         const images = SPECIES_IMAGES[key];
         const randomImage = images[Math.floor(Math.random() * images.length)];
-        setCurrentQuestion({ correctId: key, imagePath: `./images/${randomImage}` });
+        setCurrentQuestion({ correctId: key, imagePath: `/images/${randomImage}` });
         setSelectedOption(null);
         setGameState("playing");
         setShowZhengBang(false);
@@ -79,7 +107,7 @@ export default function App() {
             setShowZhengBang(true);
 
             try {
-                const audio = new Audio("./audio/蒸蚌.wav");
+                const audio = new Audio("/audio/蒸蚌.wav");
                 audio.play().catch((e) => console.error("Audio play failed", e));
             } catch (e) {
                 console.error("Audio init failed", e);
@@ -141,6 +169,8 @@ export default function App() {
     return (
         <div className="min-h-screen w-full font-sans max-w-md mx-auto border-x border-gray-200 shadow-2xl flex flex-col relative overflow-hidden bg-sky-50">
             <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-sky-200 to-sky-50 -z-10 rounded-b-[3rem]"></div>
+
+            <LangSwitch current={t.lang} />
 
             {/* Header */}
             <header className="px-4 pt-5 pb-3 flex items-center justify-between z-10" style={{ paddingTop: "max(1.25rem, env(safe-area-inset-top))" }}>

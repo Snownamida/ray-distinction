@@ -1,28 +1,23 @@
 import zh from "./zh.js";
+import en from "./en.js";
+import fr from "./fr.js";
 
-// Les paquets en/fr seront ajoutés à cet index une fois rédigés.
-const DICTS = { zh };
+const DICTS = { zh, en, fr };
 export const SUPPORTED = Object.keys(DICTS);
 const STORAGE_KEY = "ray_lang";
 
 /**
- * Détermine la langue active, par ordre de priorité :
- *  1. le chemin d'URL (/en/…, /fr/…) — chaque langue a sa page statique ;
- *  2. le choix mémorisé (localStorage) ;
- *  3. la langue du navigateur ;
- *  4. le chinois par défaut.
+ * La langue active est déterminée UNIQUEMENT par le chemin d'URL :
+ *  /en/… → en, /fr/… → fr, racine « / » → zh.
+ * Chaque langue est une page statique dont le <head> et l'article SEO sont
+ * déjà figés dans cette langue ; l'interface React doit donc suivre le chemin,
+ * pas le navigateur (sinon <head> chinois + jeu anglais). La détection
+ * automatique du navigateur est gérée séparément par la bannière de la page
+ * racine, et le choix manuel par le sélecteur qui navigue vers /en/ ou /fr/.
  */
 export function resolveLang() {
   const seg = location.pathname.split("/").filter(Boolean)[0];
-  if (seg && DICTS[seg]) return seg;
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved && DICTS[saved]) return saved;
-  } catch {
-    /* localStorage indisponible */
-  }
-  const nav = (navigator.language || "").slice(0, 2).toLowerCase();
-  return DICTS[nav] ? nav : "zh";
+  return seg && DICTS[seg] ? seg : "zh";
 }
 
 export function getDict(lang) {
