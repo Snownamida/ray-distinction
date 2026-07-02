@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+/* Animations personnalisées (anciennement dans <style> de index.html).
+   NB : « bounce » est redéfini ici car les keyframes Tailwind ne sont émis
+   que si la classe utilitaire correspondante est utilisée. */
+@keyframes bounce {
+    0%,
+    100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+@keyframes bounce-custom {
+    0%,
+    100% {
+        transform: translateY(-25%) scale(1.1);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        transform: translateY(0) scale(1.1);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+html,
+body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/* Article statique SEO (sous le jeu) */
+.seo-article {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 3rem;
+    color: #334155;
+    line-height: 1.75;
+    font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.seo-article h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #0c4a6e;
+    margin: 1.5rem 0 0.5rem;
+}
+.seo-article h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #075985;
+    margin: 1.25rem 0 0.35rem;
+}
+.seo-article p,
+.seo-article li {
+    font-size: 0.95rem;
+}
+.seo-article ul {
+    padding-left: 1.25rem;
+    list-style: disc;
+}
+.seo-article a {
+    color: #0284c7;
+}

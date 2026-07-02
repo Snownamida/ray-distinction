@@ -45,15 +45,16 @@
 
 ## 🛠️ 技术栈
 
-- 纯静态单页面：`React 18`（UMD）+ `Babel Standalone` + `Tailwind CSS`（CDN）
-- 无需构建，直接托管于 GitHub Pages（自定义域名见 `CNAME`）
+- `Vite` + `React 18` + `Tailwind CSS v4`，构建时预编译（此前为 Babel 浏览器内实时编译，首屏需下载约 3 MB 依赖；现产物约 50 KB gzip）
+- 静态资源位于 `public/`（图片、音频），构建输出 `dist/`
+- 托管于 Cloudflare Pages（构建命令 `npm run build`，输出目录 `dist`）
 
 ## 💻 本地运行
 
 ```bash
-# 在项目根目录
-python3 -m http.server 8000
-# 浏览器打开 http://127.0.0.1:8000/
+npm install
+npm run dev      # 开发服务器
+npm run build    # 生产构建 -> dist/
 ```
 
 ## 📄 媒体与版权

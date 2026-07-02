@@ -1,0 +1,36 @@
+{
+    "name": "ray-distinction",
+    "version": "2.0.0",
+    "description": "鳐魟鲼分辨大挑战 — 看图学会区分鳐（skate）、魟（stingray）和鲼（eagle ray）的海洋科普小游戏。",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "keywords": [
+        "quiz",
+        "marine-biology",
+        "skate",
+        "stingray",
+        "eagle-ray",
+        "海洋科普"
+    ],
+    "author": "Snownamida",
+    "license": "MIT",
+    "homepage": "https://ray.snownamida.top",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Snownamida/ray-distinction.git"
+    },
+    "dependencies": {
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.1.0",
+        "@vitejs/plugin-react": "^4.3.0",
+        "tailwindcss": "^4.1.0",
+        "vite": "^6.4.1"
+    }
+}
