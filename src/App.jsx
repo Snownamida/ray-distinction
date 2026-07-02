@@ -19,14 +19,16 @@ const SPECIES_DATA = {
     },
     eagleray: {
         id: "eagleray",
-        name: "鲼 (Eagle Ray / Manta)",
+        name: "鲼 (Eagle Ray)",
         simpleName: "鲼",
-        desc: "头部与身体分界明显，口两侧有“头鳍（角状头叶）”。胸鳍尖长如鸟翼，在水层中“飞行”游动而非趴海底。许多鲼类尾部也带毒刺。",
+        desc: "头部与身体分界明显，口两侧有“头鳍（角状头叶）”。胸鳍尖长如鸟翼，在水层中“飞行”游动而非趴海底。多数鲼类尾部带毒刺。（近亲蝠鲼 manta 属另一科 Mobulidae，滤食浮游生物、无毒刺。）",
     },
 };
 
 const SPECIES_IMAGES = {
-    skate: ["skate_1.jpg", "skate_2.jpg", "skate_3.jpg", "skate_4.jpg", "skate_5.jpg", "skate_6.jpg"],
+    // skate_2 / skate_5 retirés : ce sont des poissons-guitare (fiddler ray,
+    // Rhinopristiformes), pas de vrais skates (Rajidae) — voir l'audit.
+    skate: ["skate_1.jpg", "skate_3.jpg", "skate_4.jpg", "skate_6.jpg"],
     stingray: ["stingray_1.jpg", "stingray_2.jpg", "stingray_3.jpg", "stingray_4.jpg", "stingray_5.jpg", "stingray_6.jpg"],
     eagleray: ["eagle_ray_1.jpg", "eagle_ray_2.jpg", "eagle_ray_3.jpg", "eagle_ray_4.jpg", "eagle_ray_5.jpg", "eagle_ray_6.jpg"],
 };
